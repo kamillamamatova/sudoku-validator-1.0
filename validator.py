@@ -91,7 +91,7 @@ def order_points(pts):
     # Bottom left, highest difference
     rect[3] = pts[np.argmax(diff)]
 
-    return rect
+    return np.array(rect)
 
 # Divides the Sudoku image into 81 cells and uses OCR to detect digits
 def recognize_digits(grid_img):
