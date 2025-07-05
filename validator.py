@@ -92,3 +92,39 @@ def order_points(pts):
     rect[3] = pts[np.argmax(diff)]
 
     return rect
+
+# Divides the Sudoku image into 81 cells and uses OCR to detect digits
+def recognize_digits(grid_img):
+    # Resizes the grid image for consistency
+    grid_img = cv2.resize(grid_img, (450, 450))
+    # 450 // 9 = 50
+    cell_width = grid_img.shape[0] // 9
+    digits = []
+
+    for row in range(9):
+        row_digits = []
+        for col in range(9):
+            # Calculates the coordinates of the cell
+            # So if col = 1 (first loop), and each cell width is 50 pixels,
+            # 1 * 50, x = 50
+            # col = 2, 2 * 50, x = 100
+            # so on...
+            x = col * cell_width
+            # y = 1, 1 * 50, y = 50
+            # Waits for col loop to finish to increment row
+            y = row * cell_width
+            # Extracts each 50x50 cell
+            # Slicing
+            cell = grid_img[y: y + cell_width, x: x + cell_width]
+            # Binarizes the cell
+            thresh = cv2.theshold(cell, 128, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
+
+            # OCR w single character mode
+            digit = pytesseract.image_to_string(thresh, config = "--psm 10 digits")
+            # Removes any non digit characters
+            digit = ''.join(filter(str.isdigit, digit))
+            # Converts to int or 0 if empty
+            row_digits.append(int(digit) if digit else 0)
+        digits.append(row_digits)
+    # Returns a 9x9 grid of digits
+    return digits
