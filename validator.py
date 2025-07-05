@@ -159,6 +159,8 @@ def validate_sudoku(grid):
     # Checks all 3 x 3 boxes
     for i in range(0, 9, 3):
         for j in range(0, 9, 3):
+            # y is the row index, goes down the grid
+            # x is the column index, goes across the grid
             box = [grid[y][x] for y in range(i, i + 3) for x in range(j, j + 3)]
             if not is_valid_group(box):
                 for y in range(i, i + 3):
