@@ -126,5 +126,45 @@ def recognize_digits(grid_img):
             # Converts to int or 0 if empty
             row_digits.append(int(digit) if digit else 0)
         digits.append(row_digits)
-    # Returns a 9x9 grid of digits
+    # Returns a 9 x 9 grid of digits
     return digits
+
+# Checks if the Sudoku grid follows the rules
+def validate_sudoku(grid):
+    # Stores all mistakes (row, col)
+    mistakes = []
+    valid = True
+
+    def is_valid_group(group):
+        # Ignores empty cells
+        nums = [n for n in group if n != 0]
+        # Checks for duplicates
+        return len(nums) == len(set(nums))
+
+    # Checks all rows
+    for i in range(9):
+        if not is_valid_group(grid[i]):
+            for j in range(9):
+                mistakes.append((i, j))
+            valid = False
+    
+    # Checks all columns
+    for j in range(9):
+        col = [grid[i][j] for i in range(9)]
+        if not is_valid_group(col):
+            for i in range(9):
+                mistakes.append((i, j))
+            valid = False
+
+    # Checks all 3 x 3 boxes
+    for i in range(0, 9, 3):
+        for j in range(0, 9, 3):
+            box = [grid[y][x] for y in range(i, i + 3) for x in range(j, j + 3)]
+            if not is_valid_group(box):
+                for y in range(i, i + 3):
+                    for x in range(j, j + 3):
+                        mistakes.append((y, x))
+                valid = False
+    
+    # Overall result and specific error locations
+    return valid, mistakes
