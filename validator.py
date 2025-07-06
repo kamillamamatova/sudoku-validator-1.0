@@ -34,6 +34,7 @@ def extract_grid(image):
 
 # Warps a quadrilateral in the image to a rectangle   
 def four_point_transform(image, pts):
+    pts = np.array(pts, dtype = "float32")
     # Orders the points
     # Points are in clockwise order (top left, top right, bottom right, bottom left)
     rect = order_points(pts)
@@ -61,16 +62,17 @@ def four_point_transform(image, pts):
         
     # Matrix destination points for warp
     dst = np.array([
-        [0, 0]
+        [0, 0],
         [width - 1, 0],
         [width - 1, height - 1],
         [0, height - 1]
     ], dtype = "float32") # 32-bit IEEE 754
 
     # Compute warp matrix
-    M = cv2.warpPerspectiveTransform(rect, dst)
+    M = cv2.getPerspectiveTransform(rect, dst)
     # Warps the image
-    return cv2.warpPerspective(image, M, (width, height))
+    warped = cv2.warpPerspective(image, M, (width, height))
+    return warped
 
 # Ensures the 4 grid points are consistently ordered
 def order_points(pts):
@@ -117,7 +119,7 @@ def recognize_digits(grid_img):
             # Slicing
             cell = grid_img[y: y + cell_width, x: x + cell_width]
             # Binarizes the cell
-            thresh = cv2.theshold(cell, 128, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
+            thresh = cv2.threshold(cell, 128, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
 
             # OCR w single character mode
             digit = pytesseract.image_to_string(thresh, config = "--psm 10 digits")
