@@ -29,6 +29,10 @@ if uploaded_file:
             for row in digits:
                 st.write(row)
 
+            # Duplicate debugging
+            if not is_valid_group(grid[i]):
+                st.write(f"Invalid Row {i + 1}: {grid[i][j]}")
+
             valid, mistakes = validate_sudoku(digits)
             st.write("Valid Sudoku!" if valid else "Sudoku is incorrect.")
             if not valid:
