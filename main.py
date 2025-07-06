@@ -22,6 +22,13 @@ if uploaded_file:
             st.error("Could not detect a valid Sudoku grid.")
         else:
             digits = recognize_digits(grid_image)
+
+            # Confirms if it's saying "Valid Sudoku" bc OCR got it wrong
+            # or the validation logic missed something
+            st.write("OCR Detected Grid:")
+            for row in digits:
+                st.write(row)
+
             valid, mistakes = validate_sudoku(digits)
             st.write("Valid Sudoku!" if valid else "Sudoku is incorrect.")
             if not valid:
