@@ -119,10 +119,12 @@ def recognize_digits(grid_img):
             # Slicing
             cell = grid_img[y: y + cell_width, x: x + cell_width]
 
+            # Adds border to help OCR see digits better
+            cell = cv2.copyMakeBorder(cell, 10, 10, 10, 10, cv2.BORDER_CONSTANT, value = 225)
             # Resizes up for better OCR resolution
             cell = cv2.resize(cell, (100, 10))
             # Binarizes with strong thresholding
-            _, cell = cv2.threshold(cell, 150, 255, cv2.THRESH_BINARY_INV)
+            _, thresh = cv2.threshold(cell, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
             # OCR w single character mode
             digit = pytesseract.image_to_string(cell, config = "--psm 8 -c tessedit_char_whitelist=123456789")
