@@ -140,42 +140,62 @@ def recognize_digits(grid_img):
 
 # Checks if the Sudoku grid follows the rules
 def validate_sudoku(grid):
-    # Stores all mistakes (row, col)
-    mistakes = []
-    valid = True
+    for i in range(9):
+        row = [n for n in grid[i] if n != 0]
+        col = [grid[j][i] for j in range(9) if grid [j][i] != 0]
+        if len(row) != len(set(row)) or len(col) != len(set(col)):
+            return False, []
+        
+    # Checks all 3 x 3 boxes
+    for box_row in range(0, 9, 3):
+        for box_col in range(0, 9, 3):
+            box = []
+            for i in range(3):
+                for j in range(3):
+                    val = grid[box_row + i][box_col + j]
+                    if val != 0:
+                        box.append(val)
+                if len(box) != len(set(box)):
+                    return False, []
+                
+    return True, []
 
-    def is_valid_group(group):
+    # Stores all mistakes (row, col)
+    #mistakes = []
+    #valid = True
+
+    #def is_valid_group(group):
         # Ignores empty cells
-        nums = [n for n in group if n != 0]
+        #nums = [n for n in group if n != 0]
         # Checks for duplicates
-        return len(nums) == len(set(nums))
+        #return len(nums) == len(set(nums))
 
     # Checks all rows
-    for i in range(9):
-        if not is_valid_group(grid[i]):
-            for j in range(9):
-                mistakes.append((i, j))
-            valid = False
+    #for i in range(9):
+        #if not is_valid_group(grid[i]):
+            #for j in range(9):
+                #mistakes.append((i, j))
+            #valid = False
     
     # Checks all columns
-    for j in range(9):
-        col = [grid[i][j] for i in range(9)]
-        if not is_valid_group(col):
-            for i in range(9):
-                mistakes.append((i, j))
-            valid = False
+    #for j in range(9):
+        #col = [grid[i][j] for i in range(9)]
+        #if not is_valid_group(col):
+            #for i in range(9):
+                #mistakes.append((i, j))
+            #valid = False
 
     # Checks all 3 x 3 boxes
-    for i in range(0, 9, 3):
-        for j in range(0, 9, 3):
+    #for i in range(0, 9, 3):
+        #for j in range(0, 9, 3):
             # y is the row index, goes down the grid
             # x is the column index, goes across the grid
-            box = [grid[y][x] for y in range(i, i + 3) for x in range(j, j + 3)]
-            if not is_valid_group(box):
-                for y in range(i, i + 3):
-                    for x in range(j, j + 3):
-                        mistakes.append((y, x))
-                valid = False
+            #box = [grid[y][x] for y in range(i, i + 3) for x in range(j, j + 3)]
+            #if not is_valid_group(box):
+                #for y in range(i, i + 3):
+                    #for x in range(j, j + 3):
+                        #istakes.append((y, x))
+                #valid = False
     
     # Overall result and specific error locations
-    return valid, mistakes
+    #return valid, mistakes
