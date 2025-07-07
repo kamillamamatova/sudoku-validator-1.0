@@ -127,7 +127,7 @@ def recognize_digits(grid_img):
             _, thresh = cv2.threshold(cell, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
             # OCR w single character mode
-            digit = pytesseract.image_to_string(cell, config = "--psm 8 -c tessedit_char_whitelist=123456789")
+            digit = pytesseract.image_to_string(cell, config = "--psm 6 -c tessedit_char_whitelist=123456789")
             # Removes any non digit characters
             digit = ''.join(filter(str.isdigit, digit))
 
