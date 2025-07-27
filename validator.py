@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import pytesseract
 import imutils
 
 # Detects the outer Sudoku grid and returns a top down (warped) view of it
@@ -16,9 +15,9 @@ def extract_grid(image):
     contours = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     # Compatibility fix fro OpenCV versions
     contours = imutils.grab_contours(contours)
-
     # Sorts contours by size, largest first
     contours = sorted(contours, key = cv2.contourArea, reverse = True)
+
     for c in contours:
         perimeter = cv2.arcLength(c, True)
         # Approximates polygon shape
@@ -34,7 +33,6 @@ def extract_grid(image):
 
 # Warps a quadrilateral in the image to a rectangle   
 def four_point_transform(image, pts):
-    pts = np.array(pts, dtype = "float32")
     # Orders the points
     # Points are in clockwise order (top left, top right, bottom right, bottom left)
     rect = order_points(pts)
@@ -93,7 +91,7 @@ def order_points(pts):
     # Bottom left, highest difference
     rect[3] = pts[np.argmax(diff)]
 
-    return np.array(rect)
+    return rect
 
 # Checks if the Sudoku grid follows the rules
 def validate_sudoku(grid):
@@ -112,8 +110,8 @@ def validate_sudoku(grid):
                     val = grid[box_row + i][box_col + j]
                     if val != 0:
                         box.append(val)
-                if len(box) != len(set(box)):
-                    return False, []
+            if len(box) != len(set(box)):
+                return False, []
                 
     return True, []
 
@@ -155,4 +153,4 @@ def validate_sudoku(grid):
                 #valid = False
     
     # Overall result and specific error locations
-    #return valid, mistakes
+    # return valid, mistakes
