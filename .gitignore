@@ -1,4 +1,4 @@
-# Virtual Environment
+# Virtual environment
 .venv/
 
 # Python cache
@@ -7,3 +7,6 @@ __pycache__/
 
 # Trained model
 knn_digit_model.pkl
+
+# macOS system file
+.DS_Store
