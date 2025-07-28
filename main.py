@@ -2,7 +2,8 @@ import streamlit as st
 import cv2
 import numpy as np
 from PIL import Image
-from validator import extract_grid, recognize_digits, validate_sudoku
+from validator import extract_grid, validate_sudoku
+from recognizer import recognize_digits_from_grid
 
 st.set_page_config(page_title = "Soduku Validator", layout = "centered")
 st.title("Sudoku Validator")
@@ -21,7 +22,7 @@ if uploaded_file:
         if grid_image is None:
             st.error("Could not detect a valid Sudoku grid.")
         else:
-            digits = recognize_digits(grid_image)
+            digits = recognize_digits_from_grid(grid_image)
 
             # Confirms if it's saying "Valid Sudoku" bc OCR got it wrong
             # or the validation logic missed something

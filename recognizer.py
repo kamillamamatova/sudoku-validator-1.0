@@ -45,7 +45,8 @@ def recognize_digits_from_grid(grid_img):
     return digits
 
 def preprocess_cell(cell):
-    cell = cv2.cvtColor(cell, cv2.COLOR_BGR2GRAY)
+    if len(cell.shape) == 3:
+        cell = cv2.cvtColor(cell, cv2.COLOR_BGR2GRAY)
     # Resises to 28 x 28 for KNN
     cell = cv2.resize(cell, (28, 28))
     # Binarizes with strong thresholding
