@@ -50,5 +50,5 @@ def preprocess_cell(cell):
     # Resises to 28 x 28 for KNN
     cell = cv2.resize(cell, (28, 28))
     # Binarizes with strong thresholding
-    _, cell = cv2.threshold(cell, 150, 255, cv2.THRESH_BINARY_INV)
+    _, cell = cv2.threshold(cell, 100, 255, cv2.THRESH_BINARY_INV)
     return cell.flatten() / 255.0
