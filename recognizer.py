@@ -47,8 +47,11 @@ def recognize_digits_from_grid(grid_img):
 def preprocess_cell(cell):
     if len(cell.shape) == 3:
         cell = cv2.cvtColor(cell, cv2.COLOR_BGR2GRAY)
+
     # Resises to 28 x 28 for KNN
     cell = cv2.resize(cell, (28, 28))
-    # Binarizes with strong thresholding
-    _, cell = cv2.threshold(cell, 100, 255, cv2.THRESH_BINARY_INV)
+    
+    # Binarizes with strong thresholding for robustness
+    cell = cv2.adaptiveThreshold(cell, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+
     return cell.flatten() / 255.0
