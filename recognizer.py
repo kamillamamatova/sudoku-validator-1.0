@@ -51,8 +51,23 @@ def preprocess_cell(cell):
     if len(cell.shape) == 3:
         cell = cv2.cvtColor(cell, cv2.COLOR_BGR2GRAY)
 
-    # Resises to 28 x 28 for KNN
-    cell = cv2.resize(cell, (28, 28))
+    def center_and_resize(cell):
+        # Finds bounding box of the digit
+        coordinates = cv2.findNonZero(cell)
+        if coordinates is None:
+            return np.zeros((28, 28), dtype = np.uint8)
+        x, y, w, h = cv2.boundingRect(coordinates)
+        digit = cell[y: y + h, x: x + w]
+
+        # Makes it square
+        size = max(w, h)
+        square = np.zeros((size, size), dtype = np.uint8)
+        square[(size - h)//2: (size - h)//2 + h, (size - w)//2: (size - w)//2 + w] = digit
+
+        # Resizes to 28 x 28
+        return cv2.resize(square, (28, 28), interpolation = cv2.INTER_AREA)
+    
+    cell = center_and_resize(cell)
 
     # Binarizes with strong thresholding for robustness
     cell = cv2.adaptiveThreshold(cell, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
