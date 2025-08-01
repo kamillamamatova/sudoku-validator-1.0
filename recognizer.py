@@ -12,6 +12,9 @@ def recognize_digits_from_grid(grid_img):
     cell_size = grid_img.shape[0] // 9
     digits = []
 
+    # A margin to remove the grid lines from the cell image
+    margin = 5
+
     for row in range(9):
         row_digits = []
         for col in range(9):
@@ -26,18 +29,18 @@ def recognize_digits_from_grid(grid_img):
             y = row * cell_size
             # Extracts each 50x50 cell
             # Slicing
-            cell = grid_img[y: y + cell_size, x: x + cell_size]
+            cell_img = grid_img[y + margin: y + cell_size - margin, x + margin: x + cell_size - margin]
 
             # Preprocesses cells
-            cell = preprocess_cell(cell)
+            cell_processed = preprocess_cell(cell_img)
 
             # Marks as 0 if mostly blank
-            if np.count_nonzero(cell) < 100:
+            if np.count_nonzero(cell_processed) < 100:
                 row_digits.append(0)
                 continue
 
             # Flattens and predicts
-            cell_flat = cell.reshape(1, -1)
+            cell_flat = cell_processed.reshape(1, -1)
             prediction = model.predict(cell_flat)[0]
             row_digits.append(int(prediction))
         digits.append(row_digits)
@@ -50,7 +53,7 @@ def preprocess_cell(cell):
 
     # Resises to 28 x 28 for KNN
     cell = cv2.resize(cell, (28, 28))
-    
+
     # Binarizes with strong thresholding for robustness
     cell = cv2.adaptiveThreshold(cell, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
 

@@ -17,9 +17,9 @@ X, y = fetch_openml('mnist_784', version = 1, return_X_y = True, as_frame = Fals
 X = X / 255.0
 
 # Uses only didgits 1-9
-mask = y != '0'
-X = X[mask]
-y = y[mask]
+#mask = y != '0'
+#X = X[mask]
+#y = y[mask]
 
 # Trains KNN classifier
 print("Training KNN...")
