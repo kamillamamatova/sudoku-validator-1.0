@@ -13,7 +13,7 @@ def recognize_digits_from_grid(grid_img):
     digits = []
 
     # A margin to remove the grid lines from the cell image
-    margin = 5
+    margin = 10
 
     for row in range(9):
         row_digits = []
