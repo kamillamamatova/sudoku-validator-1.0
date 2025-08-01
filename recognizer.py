@@ -55,6 +55,6 @@ def preprocess_cell(cell):
     cell = cv2.resize(cell, (28, 28))
 
     # Binarizes with strong thresholding for robustness
-    cell = cv2.adaptiveThreshold(cell, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+    cell = cv2.adaptiveThreshold(cell, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
 
     return cell.flatten() / 255.0
